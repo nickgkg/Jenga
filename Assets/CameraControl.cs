@@ -32,6 +32,7 @@ public class CameraControl : MonoBehaviour {
 	UpdateAnimation a;
 	void Start () {
 		a = (UpdateAnimation)arm.GetComponent("UpdateAnimation");
+		print (a.gameObject.name);
 		Update();
 	}
 
@@ -60,6 +61,7 @@ public class CameraControl : MonoBehaviour {
 		}
 
 		if(thalmicMyo.pose == Pose.FingersSpread){
+			print ("hello");
 			a.animIndex = 1;
 		}else if(thalmicMyo.pose == Pose.Fist){
 			a.animIndex = 2;

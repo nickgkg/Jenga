@@ -15,6 +15,7 @@ public class UpdateAnimation : MonoBehaviour {
 	void Update () {
 		if(animIndex == 0 || lastAnim+animIndex==3){
 			if(lastAnim == 1){
+				print ("hmm");
 				a["Point"].speed = -speed;
 				a.Play ("Point");
 				a["Point"].time= a["Point"].time < a["Point"].length ? a["Point"].time:  a["Point"].length;
