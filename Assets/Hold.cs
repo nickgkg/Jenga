@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Hold : MonoBehaviour {
 	
-	GameObject held = null;
+	public static GameObject held = null;
 	public GameObject arm;
 	UpdateAnimation a;
 
@@ -13,9 +13,11 @@ public class Hold : MonoBehaviour {
 	}
 
 	public void setHeld(GameObject g){
-		held = g;
-		held.transform.parent = arm.transform.parent; 
-		((Rigidbody)held.GetComponent("Rigidbody")).isKinematic = true;
+		if(held == null){
+			held = g;
+			held.transform.parent = arm.transform.parent; 
+			((Rigidbody)held.GetComponent("Rigidbody")).isKinematic = true;
+		}
 	}
 
 	void Update () {

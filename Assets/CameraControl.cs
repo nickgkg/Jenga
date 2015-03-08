@@ -16,6 +16,7 @@ public class CameraControl : MonoBehaviour {
 	// Once set, the direction the Myo armband is facing becomes "forward" within the program.
 	// Set by making the fingers spread pose or pressing "r".
 	private Quaternion _antiYaw = Quaternion.identity;
+	private Quaternion initQuat;
 	
 	// A reference angle representing how the armband is rotated about the wearer's arm, i.e. roll.
 	// Set by making the fingers spread pose or pressing "r".
@@ -43,6 +44,7 @@ public class CameraControl : MonoBehaviour {
 		initGyrZ = thalmicMyo.gyroscope.z;
 		initGyrX = thalmicMyo.gyroscope.x;
 		initGyrY = thalmicMyo.gyroscope.y;
+		initQuat = thalmicMyo.transform.rotation;
 		a = (UpdateAnimation)arm.GetComponent("UpdateAnimation");
 		print (a.gameObject.name);
 		initRotY = myo.transform.rotation.eulerAngles.y;
@@ -57,18 +59,25 @@ public class CameraControl : MonoBehaviour {
 		// Update references when the pose becomes fingers spread or the q key is pressed.
 		int moveDirection = 0;
 		if (thalmicMyo.pose == Pose.WaveIn && Input.GetKey ("space") || Input.GetKey("a")) {
-			moveDirection = 1;
+			if(Input.GetKey(KeyCode.LeftShift))
+				armShift-=0.3f;
+			else
+				moveDirection = 1;
 			//print (1);
 			
 			//ExtendUnlockAndNotifyUserAction(thalmicMyo);
 		}
 		
 		if (thalmicMyo.pose == Pose.WaveOut && Input.GetKey ("space") || Input.GetKey("d")){
-			moveDirection = -1;
+			if(Input.GetKey(KeyCode.LeftShift))
+				armShift+=0.3f;
+			else
+				moveDirection = -1;
 			//ExtendUnlockAndNotifyUserAction(thalmicMyo);
 		}
 
 		if (Input.GetKey ("h")) {
+			initQuat = thalmicMyo.transform.rotation;
 			initGyrZ = thalmicMyo.gyroscope.z;
 			initGyrX = thalmicMyo.gyroscope.x;
 			initGyrY = thalmicMyo.gyroscope.y;
@@ -110,36 +119,51 @@ public class CameraControl : MonoBehaviour {
 		if (moveDirection != 0) {
 			theta += -1*moveDirection*0.025f;
 		}
+
+		if (thalmicMyo.pose == Pose.DoubleTap){
+			Object.Destroy(GameObject.Find("Hub"));
+			Application.LoadLevel (0);
+		}
 		if (!Input.GetKey ("space")) {
-			float adjGyrZ = thalmicMyo.gyroscope.z - initGyrZ;
-			float adjGyrX = thalmicMyo.gyroscope.x - initGyrX;
-			float adjGyrY = thalmicMyo.gyroscope.y - initGyrY;
-			if (adjGyrZ > 10 || adjGyrZ < -10) {
-				if (adjGyrZ > 80){
-					adjGyrZ /= 3;
+			if(false){
+				Quaternion armPos = thalmicMyo.transform.rotation;
+				armHeight += (armPos.x-initQuat.x);
+				armShift += (armPos.y-initQuat.y);
+				armDistance += (armPos.z-initQuat.z)/5;
+			}else{
+
+				float adjGyrZ = thalmicMyo.gyroscope.z - initGyrZ;
+				float adjGyrX = thalmicMyo.gyroscope.x - initGyrX;
+				float adjGyrY = thalmicMyo.gyroscope.y - initGyrY;
+				if (adjGyrZ > 10 || adjGyrZ < -10) {
+					if (adjGyrZ > 80){
+						adjGyrZ /= 3;
+					}
+					armDistance -= adjGyrZ/300;
+				} if ((adjGyrX > 10 || adjGyrX < -10)  && !(a.animIndex ==2 && Hold.held!=null)){
+					armHeight -= adjGyrX / 200;
+				} if (adjGyrY > 10 || adjGyrY < -10) {//left and right
+					armShift -= adjGyrY / 100;
 				}
-				armDistance -= adjGyrZ/100;
-			}else if (adjGyrX > 10 || adjGyrX < -10){
-				armHeight -= adjGyrX / 200;
-			}else if (adjGyrY > 10 || adjGyrY < -10) {//left and right
-				armShift -= adjGyrY / 100;
-			}
-			
-			if (armDistance > 10) {
-				armDistance = 10f;
-			} else if (armDistance < -5) {
-				armDistance = -5f;
-			} else if (armShift > 35) {
-				armShift = 35f;
-			} else if (armShift < -35) {
-				armShift = -35f;
-			} else if (armHeight > 8) {
-				armHeight = 8;
-			} else if (armHeight < -2) {
-				armHeight = -2;
+				//Quaternion armPos = thalmicMyo.transform.rotation;
+				//armDistance += (armPos.z-initQuat.z)/5;
 			}
 		}
-		
+		if (armDistance > 10) {
+			armDistance = 10f;
+		} else if (armDistance < -2) {
+			armDistance = -2f;
+		}
+		if (armShift > 35) {
+			armShift = 35f;
+		} else if (armShift < -35) {
+			armShift = -35f;
+		}
+		if (armHeight > 8) {
+			armHeight = 8;
+		} else if (armHeight < 0) {
+			armHeight = 0;
+		}
 		
 		//camera transforms
 		transform.localPosition = new Vector3((float)(radius*Mathf.Cos(theta))

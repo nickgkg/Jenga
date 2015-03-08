@@ -31,6 +31,7 @@ public class UpdateAnimation : MonoBehaviour {
 			a.Play ("Point");
 			lastAnim = 1;
 		}else if(animIndex == 2 && a["Point"].time<0.01){
+			if(a["grab"].time<0){a["grab"].time=0;}
 			a["grab"].speed = speed;
 			a.Play ("grab");
 			lastAnim = 2;
