@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\BlockSpawner.cs" />
+     <Compile Include="Assets\CameraControl.cs" />
      <Compile Include="Assets\Haptic Project Components\Scripts\Converter\Converter.cs" />
      <Compile Include="Assets\Haptic Project Components\Scripts\Force Effects\ConstantForceEffect.cs" />
      <Compile Include="Assets\Haptic Project Components\Scripts\Force Effects\FrictionEffect.cs" />
