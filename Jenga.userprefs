@@ -1,9 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/CameraControl.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Arm\UpdateAnimation.cs">
     <Files>
-      <File FileName="Assets/CameraControl.cs" Line="105" Column="5" />
-      <File FileName="Assets/Myo Samples/Scripts/JointOrientation.cs" Line="1" Column="1" />
+      <File FileName="Assets\CameraControl.cs" Line="154" Column="33" />
+      <File FileName="Assets\Myo Samples\Scripts\JointOrientation.cs" Line="1" Column="1" />
+      <File FileName="Assets\MyTrigger.cs" Line="10" Column="15" />
+      <File FileName="Assets\Hold.cs" Line="23" Column="19" />
+      <File FileName="Assets\BlockSpawner.cs" Line="15" Column="20" />
+      <File FileName="Assets\Arm\UpdateAnimation.cs" Line="13" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

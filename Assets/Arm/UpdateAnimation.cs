@@ -8,7 +8,8 @@ public class UpdateAnimation : MonoBehaviour {
 	Animation a;
 	void Start () {
 		a = (Animation)this.GetComponent("Animation");
-		a.wrapMode = WrapMode.ClampForever;
+		a["Point"].wrapMode = WrapMode.ClampForever;
+		a["grab"].wrapMode = WrapMode.ClampForever;
 	}
 	
 	// Update is called once per frame
