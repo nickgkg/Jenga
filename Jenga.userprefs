@@ -1,8 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Myo/README-MyoUnity.txt">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Haptic Project Components/Scripts/Plugin Import/GenericFunctionsClass.cs">
     <Files>
       <File FileName="Assets/Myo/README-MyoUnity.txt" Line="24" Column="14" />
+      <File FileName="Assets/Haptic Project Components/Scripts/Script Scene/Advanced Examples/Writing/Writing.cs" Line="1" Column="1" />
+      <File FileName="Assets/Haptic Project Components/Scripts/Plugin Import/GenericFunctionsClass.cs" Line="28" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
