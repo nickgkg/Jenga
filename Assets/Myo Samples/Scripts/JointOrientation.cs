@@ -30,6 +30,11 @@ public class JointOrientation : MonoBehaviour
     // which they are active.
     private Pose _lastPose = Pose.Unknown;
 
+	UpdateAnimation a;
+	void Start () {
+		a = (UpdateAnimation)this.GetComponent("UpdateAnimation");
+	}
+
     // Update is called once per frame.
     void Update ()
     {
