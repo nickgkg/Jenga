@@ -28,9 +28,10 @@ public class CameraControl : MonoBehaviour {
 	private Pose _lastPose = Pose.Unknown;
 	private float radius = 10;
 	private float armDistance = 0;//min is 0
-
+	private float myoDistance = 0f;
 	UpdateAnimation a;
 	void Start () {
+		myoDistance = myo.transform.position.x;
 		a = (UpdateAnimation)arm.GetComponent("UpdateAnimation");
 		print (a.gameObject.name);
 		Update();
@@ -87,18 +88,21 @@ public class CameraControl : MonoBehaviour {
 		if (Input.GetKey ("q")) {
 			height-=0.1f;
 		}
+		float newMyoDistance = myo.transform.position.x;
+		armDistance -= newMyoDistance-myoDistance;
 
 		// Update references. This anchors the joint on-screen such that it faces forward away
 		// from the viewer when the Myo armband is oriented the way it is when these references are taken.
 		if (moveDirection != 0) {
 			theta += -1*moveDirection*0.025f;
 		}
+
 		
 		transform.localPosition = new Vector3((float)(radius*Mathf.Cos(theta)),height+1,(float)(radius*Mathf.Sin(theta)));
 		transform.localRotation = Quaternion.Euler(15f, -1*theta*180/Mathf.PI-90, 0f);
-		armLocation.transform.localPosition = new Vector3((float)((radius-armDistance+1)*Mathf.Cos(theta)),height,(float)((radius-armDistance+1)*Mathf.Sin(theta)));
-		armLocation.transform.localRotation = Quaternion.Euler(0f, -1*theta*180/Mathf.PI+180, 0f);
 
+		armLocation.transform.localPosition = new Vector3((float)((radius-armDistance+1)*Mathf.Cos(theta)),height-1.5f,(float)((radius-armDistance+1)*Mathf.Sin(theta)));
+		armLocation.transform.localRotation = Quaternion.Euler(-1*myo.transform.rotation.eulerAngles.z, -1*theta*180/Mathf.PI+180, myo.transform.rotation.eulerAngles.x);
 	}
 	
 
