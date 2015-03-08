@@ -28,10 +28,12 @@ public class CameraControl : MonoBehaviour {
 	private Pose _lastPose = Pose.Unknown;
 	private float radius = 10;
 	private float armDistance = 0;//min is 0
-	private float myoDistance = 0f;
+	private float initAccX = 0;
+	private ThalmicMyo thalmicMyo;
 	UpdateAnimation a;
 	void Start () {
-		myoDistance = myo.transform.position.x;
+		thalmicMyo = myo.GetComponent<ThalmicMyo> ();
+		initAccX = thalmicMyo.gyroscope.x;
 		a = (UpdateAnimation)arm.GetComponent("UpdateAnimation");
 		print (a.gameObject.name);
 		Update();
@@ -41,8 +43,7 @@ public class CameraControl : MonoBehaviour {
 	void Update ()
 	{
 		// Access the ThalmicMyo component attached to the Myo object.
-		ThalmicMyo thalmicMyo = myo.GetComponent<ThalmicMyo> ();
-		
+
 		// Update references when the pose becomes fingers spread or the q key is pressed.
 		int moveDirection = 0;
 		if (thalmicMyo.pose == Pose.WaveIn && Input.GetKey ("space")) {
@@ -55,6 +56,10 @@ public class CameraControl : MonoBehaviour {
 		if (thalmicMyo.pose == Pose.WaveOut && Input.GetKey ("space")){
 			moveDirection = -1;
 			//ExtendUnlockAndNotifyUserAction(thalmicMyo);
+		}
+
+		if (Input.GetKey ("h")) {
+			initAccX = thalmicMyo.accelerometer.x;
 		}
 
 		if (thalmicMyo.pose != _lastPose) {
@@ -88,21 +93,28 @@ public class CameraControl : MonoBehaviour {
 		if (Input.GetKey ("q")) {
 			height-=0.1f;
 		}
-		float newMyoDistance = myo.transform.position.x;
-		armDistance -= newMyoDistance-myoDistance;
 
 		// Update references. This anchors the joint on-screen such that it faces forward away
 		// from the viewer when the Myo armband is oriented the way it is when these references are taken.
 		if (moveDirection != 0) {
 			theta += -1*moveDirection*0.025f;
 		}
+		float adjAccX = thalmicMyo.gyroscope.x - initAccX;
+		//if (adjAccX > 10 || adjAccX < -10) {
+			armDistance += adjAccX/200;
+		//}
 
+		if (armDistance > 8) {
+			armDistance = 8;
+		} else if (armDistance < -3) {
+			armDistance = -3;
+		}
 		
 		transform.localPosition = new Vector3((float)(radius*Mathf.Cos(theta)),height+1,(float)(radius*Mathf.Sin(theta)));
 		transform.localRotation = Quaternion.Euler(15f, -1*theta*180/Mathf.PI-90, 0f);
 
-		armLocation.transform.localPosition = new Vector3((float)((radius-armDistance+1)*Mathf.Cos(theta)),height-1.5f,(float)((radius-armDistance+1)*Mathf.Sin(theta)));
-		armLocation.transform.localRotation = Quaternion.Euler(-1*myo.transform.rotation.eulerAngles.z, -1*theta*180/Mathf.PI+180, myo.transform.rotation.eulerAngles.x);
+		armLocation.transform.localPosition = new Vector3((float)((radius-armDistance+3)*Mathf.Cos(theta)),height-1.5f,(float)((radius-armDistance+3)*Mathf.Sin(theta)));
+		armLocation.transform.localRotation = Quaternion.Euler(-1*myo.transform.rotation.eulerAngles.z-45, -1*theta*180/Mathf.PI+180, myo.transform.rotation.eulerAngles.x);
 	}
 	
 
